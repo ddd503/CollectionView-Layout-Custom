@@ -15,6 +15,7 @@
 		450B5F8122102A88005CA65F /* PhotosDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450B5F8022102A88005CA65F /* PhotosDataStore.swift */; };
 		450B5F8422102B05005CA65F /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450B5F8222102B05005CA65F /* PhotoCell.swift */; };
 		450B5F8522102B05005CA65F /* PhotoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 450B5F8322102B05005CA65F /* PhotoCell.xib */; };
+		450B5F8822102F64005CA65F /* CollectionViewCustomLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450B5F8722102F64005CA65F /* CollectionViewCustomLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		450B5F8022102A88005CA65F /* PhotosDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosDataStore.swift; sourceTree = "<group>"; };
 		450B5F8222102B05005CA65F /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		450B5F8322102B05005CA65F /* PhotoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PhotoCell.xib; sourceTree = "<group>"; };
+		450B5F8722102F64005CA65F /* CollectionViewCustomLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCustomLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 		450B5F6922102874005CA65F /* CollectionView-Layout-Custom */ = {
 			isa = PBXGroup;
 			children = (
+				450B5F8622102F37005CA65F /* Utill */,
 				450B5F7F22102951005CA65F /* Model */,
 				450B5F7E2210294D005CA65F /* View */,
 				450B5F7D2210294A005CA65F /* Controller */,
@@ -103,6 +106,14 @@
 				450B5F8022102A88005CA65F /* PhotosDataStore.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		450B5F8622102F37005CA65F /* Utill */ = {
+			isa = PBXGroup;
+			children = (
+				450B5F8722102F64005CA65F /* CollectionViewCustomLayout.swift */,
+			);
+			path = Utill;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -180,6 +191,7 @@
 				450B5F8422102B05005CA65F /* PhotoCell.swift in Sources */,
 				450B5F8122102A88005CA65F /* PhotosDataStore.swift in Sources */,
 				450B5F6D22102874005CA65F /* ViewController.swift in Sources */,
+				450B5F8822102F64005CA65F /* CollectionViewCustomLayout.swift in Sources */,
 				450B5F6B22102874005CA65F /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

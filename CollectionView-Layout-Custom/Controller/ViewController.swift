@@ -15,6 +15,9 @@ final class ViewController: UIViewController {
         didSet {
             collectionView.dataSource = self
             collectionView.register(PhotoCell.nib(), forCellWithReuseIdentifier: PhotoCell.identifier)
+            if let layout = collectionView.collectionViewLayout as? CollectionViewCustomLayout {
+                layout.delegate = self
+            }
         }
     }
 
@@ -58,6 +61,14 @@ extension ViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.identifier, for: indexPath) as? PhotoCell else { fatalError() }
         cell.setPhotoImage(asset: assets[indexPath.item], imageSize: cellImageSize())
         return cell
+    }
+
+}
+
+extension ViewController: LayoutDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
+        return 100
     }
 
 }
