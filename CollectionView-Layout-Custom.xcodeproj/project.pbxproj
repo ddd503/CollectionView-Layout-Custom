@@ -12,6 +12,7 @@
 		450B5F7022102874005CA65F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 450B5F6E22102874005CA65F /* Main.storyboard */; };
 		450B5F7222102875005CA65F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 450B5F7122102875005CA65F /* Assets.xcassets */; };
 		450B5F7522102875005CA65F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 450B5F7322102875005CA65F /* LaunchScreen.storyboard */; };
+		450B5F8122102A88005CA65F /* PhotosDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450B5F8022102A88005CA65F /* PhotosDataStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		450B5F7122102875005CA65F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		450B5F7422102875005CA65F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		450B5F7622102875005CA65F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		450B5F8022102A88005CA65F /* PhotosDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosDataStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +94,7 @@
 		450B5F7F22102951005CA65F /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				450B5F8022102A88005CA65F /* PhotosDataStore.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -167,6 +170,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				450B5F8122102A88005CA65F /* PhotosDataStore.swift in Sources */,
 				450B5F6D22102874005CA65F /* ViewController.swift in Sources */,
 				450B5F6B22102874005CA65F /* AppDelegate.swift in Sources */,
 			);
@@ -316,7 +320,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LVR5UQEHBD;
-				INFOPLIST_FILE = "CollectionView-Layout-Custom/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/CollectionView-Layout-Custom/Other/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -334,7 +338,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LVR5UQEHBD;
-				INFOPLIST_FILE = "CollectionView-Layout-Custom/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/CollectionView-Layout-Custom/Other/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
