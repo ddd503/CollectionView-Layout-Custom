@@ -29,8 +29,8 @@ final class PhotoCell: UICollectionViewCell {
         return options
     }()
 
-    func setPhotoImage(asset: PHAsset, itemSize: CGSize) {
-        PHCachingImageManager.default().requestImage(for: asset, targetSize: itemSize, contentMode: .aspectFit, options: options) { [weak self] (image, dic) in
+    func setPhotoImage(asset: PHAsset, imageSize: CGSize) {
+        PHCachingImageManager.default().requestImage(for: asset, targetSize: imageSize, contentMode: .aspectFit, options: options) { [weak self] (image, dic) in
             self?.imageView.image = image
         }
     }
