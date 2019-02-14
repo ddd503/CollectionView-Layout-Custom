@@ -16,17 +16,16 @@ protocol LayoutDelegate: class {
 final class CollectionViewCustomLayout: UICollectionViewLayout {
 
     weak var delegate: LayoutDelegate?
+
     var contentBounds = CGRect.zero
     // オブジェクトの種類をキャッシュする
     var cachedAttributes = [UICollectionViewLayoutAttributes]()
 
-    fileprivate var numberOfColumns = 2
-    fileprivate var cellPadding: CGFloat = 6
-    fileprivate var contentHeight: CGFloat = 0
-    fileprivate var contentWidth: CGFloat {
-        guard let collectionView = collectionView else {
-            return 0
-        }
+    private var numberOfColumns = 2
+    private var cellPadding: CGFloat = 6
+    private var contentHeight: CGFloat = 0
+    private var contentWidth: CGFloat {
+        guard let collectionView = collectionView else { return 0 }
         let insets = collectionView.contentInset
         return collectionView.bounds.width - (insets.left + insets.right)
     }
@@ -47,9 +46,7 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
 
         // 3
         for item in 0 ..< collectionView.numberOfItems(inSection: 0) {
-
             let indexPath = IndexPath(item: item, section: 0)
-
             // 4
             let photoHeight = delegate?.collectionView(collectionView, heightForPhotoAtIndexPath: indexPath)
             let height = cellPadding * 2 + photoHeight!
