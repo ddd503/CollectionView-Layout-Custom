@@ -37,7 +37,9 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
             return
         }
 
+        // 横に何個入れるか？
         let columnWidth = contentWidth / CGFloat(numberOfColumns)
+        // 要素ごとのx軸を格納
         var xOffset = [CGFloat]()
         for column in 0 ..< numberOfColumns {
             xOffset.append(CGFloat(column) * columnWidth)
@@ -45,21 +47,29 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         var column = 0
         var yOffset = [CGFloat](repeating: 0, count: numberOfColumns)
 
+        // 一つずつ要素を取り出してサイズを決めていく
         for item in 0 ..< collectionView.numberOfItems(inSection: 0) {
+            // 要素のindex
             let indexPath = IndexPath(item: item, section: 0)
-
+            // VC側から要素の高さを取得（collectionViewは持っていないから）
             let photoHeight = delegate?.collectionView(collectionView, heightForPhotoAtIndexPath: indexPath)
+            // セルのスペースを含めて高さを決定
             let height = cellPadding * 2 + photoHeight!
+            // セルごとのframeを作る
             let frame = CGRect(x: xOffset[column], y: yOffset[column], width: columnWidth, height: height)
+            // insetbyは元々のスペースはない程で調整するから、あらかじめスペース分の長さを含めたlengthを渡す
             let insetFrame = frame.insetBy(dx: cellPadding, dy: cellPadding)
-
+            // indexで要素を取り出す
             let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
+            // indexで取り出したセル(要素)に用意したframeを指定する
             attributes.frame = insetFrame
+            // 要素一覧に加える
             cachedAttributes.append(attributes)
-
+            // セルのスペースを含めた一番底のy座標を取得
             contentHeight = max(contentHeight, frame.maxY)
+            // y座標管理用の配列に、追加したセル分の座標を追加する（並ぶように）
             yOffset[column] = yOffset[column] + height
-
+            // numberOfItemsの最大値に達してない場合は、1追加して、次の要素のframe生成を進める
             column = column < (numberOfColumns - 1) ? (column + 1) : 0
         }
     }
