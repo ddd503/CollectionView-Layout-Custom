@@ -25,7 +25,9 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
     private var numberOfColumns = 3
     // セル周囲のスペース
     private var cellPadding: CGFloat = 1
+    // レイアウトの総Height
     private var contentHeight: CGFloat = 0
+    // レイアウトの総Width
     private var contentWidth: CGFloat {
         guard let collectionView = collectionView else { return 0 }
         let insets = collectionView.contentInset
@@ -33,45 +35,7 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
     }
     // レイアウト準備のため計算を行う
     override func prepare() {
-        guard cachedAttributes.isEmpty, let collectionView = collectionView else {
-            return
-        }
-
-        // 横に何個入れるか？
-        let columnWidth = contentWidth / CGFloat(numberOfColumns)
-        // 要素ごとのx軸を格納
-        var xOffset = [CGFloat]()
-        for column in 0 ..< numberOfColumns {
-            xOffset.append(CGFloat(column) * columnWidth)
-        }
-        var column = 0
-        var yOffset = [CGFloat](repeating: 0, count: numberOfColumns)
-
-        // 一つずつ要素を取り出してサイズを決めていく
-        for item in 0 ..< collectionView.numberOfItems(inSection: 0) {
-            // 要素のindex
-            let indexPath = IndexPath(item: item, section: 0)
-            // VC側から要素の高さを取得（collectionViewは持っていないから）
-            let photoHeight = delegate?.collectionView(collectionView, heightForPhotoAtIndexPath: indexPath)
-            // セルのスペースを含めて高さを決定
-            let height = cellPadding * 2 + photoHeight!
-            // セルごとのframeを作る
-            let frame = CGRect(x: xOffset[column], y: yOffset[column], width: columnWidth, height: height)
-            // insetbyは元々のスペースはない程で調整するから、あらかじめスペース分の長さを含めたlengthを渡す
-            let insetFrame = frame.insetBy(dx: cellPadding, dy: cellPadding)
-            // indexで要素を取り出す
-            let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-            // indexで取り出したセル(要素)に用意したframeを指定する
-            attributes.frame = insetFrame
-            // 要素一覧に加える
-            cachedAttributes.append(attributes)
-            // セルのスペースを含めた一番底のy座標を取得
-            contentHeight = max(contentHeight, frame.maxY)
-            // y座標管理用の配列に、追加したセル分の座標を追加する（並ぶように）
-            yOffset[column] = yOffset[column] + height
-            // numberOfItemsの最大値に達してない場合は、1追加して、次の要素のframe生成を進める
-            column = column < (numberOfColumns - 1) ? (column + 1) : 0
-        }
+        prepareAttributes()
     }
 
     // スクロール領域を決定
@@ -95,6 +59,29 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
     // いらないかも
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         return cachedAttributes[indexPath.item]
+    }
+
+    private func prepareAttributes() {
+        guard cachedAttributes.isEmpty, let collectionView = collectionView else { return }
+        let cellWidth = contentWidth / CGFloat(numberOfColumns)
+        let cellXOffsets = (0 ..< numberOfColumns).map {
+            CGFloat($0) * cellWidth
+        }
+        var cellYOffsets = [CGFloat](repeating: 0, count: numberOfColumns)
+        var currentColumnNumber = 0
+        (0 ..< collectionView.numberOfItems(inSection: 0)).forEach {
+            let indexPath = IndexPath(item: $0, section: 0)
+            let itemHeight = delegate?.collectionView(collectionView, heightForPhotoAtIndexPath: indexPath) ?? 0
+            let cellHeight = cellPadding * 2 + itemHeight
+            let cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellWidth, height: cellHeight)
+            let itemFrame = cellFrame.insetBy(dx: cellPadding, dy: cellPadding)
+            let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
+            attributes.frame = itemFrame
+            cachedAttributes.append(attributes)
+            contentHeight = max(contentHeight, cellFrame.maxY)
+            cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellHeight
+            currentColumnNumber = currentColumnNumber < (numberOfColumns - 1) ? currentColumnNumber + 1 : 0
+        }
     }
 
 }
