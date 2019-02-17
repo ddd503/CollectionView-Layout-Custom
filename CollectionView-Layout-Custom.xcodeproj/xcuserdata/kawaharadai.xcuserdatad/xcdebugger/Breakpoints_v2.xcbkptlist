@@ -6,17 +6,81 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CollectionView-Layout-Custom/Utill/CollectionViewCustomLayout.swift"
-            timestampString = "571986851.4174041"
+            timestampString = "572068448.194309"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "59"
             endingLineNumber = "59"
             landmarkName = "prepare()"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CollectionView-Layout-Custom/Utill/CollectionViewCustomLayout.swift"
+            timestampString = "572068448.195012"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "80"
+            endingLineNumber = "80"
+            landmarkName = "collectionViewContentSize"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CollectionView-Layout-Custom/Utill/CollectionViewCustomLayout.swift"
+            timestampString = "572068448.195599"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "89"
+            endingLineNumber = "89"
+            landmarkName = "layoutAttributesForElements(in:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CollectionView_Layout_Custom.CollectionViewCustomLayout.layoutAttributesForElements(in: __C.CGRect) -&gt; Swift.Optional&lt;Swift.Array&lt;__C.UICollectionViewLayoutAttributes&gt;&gt;"
+                  moduleName = "CollectionView-Layout-Custom"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kawaharadai/xcode%20sorcefile/git%E7%AE%A1%E7%90%86/CollectionView-Layout-Custom/CollectionView-Layout-Custom/Utill/CollectionViewCustomLayout.swift"
+                  timestampString = "572068385.886187"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "89"
+                  endingLineNumber = "89"
+                  offsetFromSymbolStart = "51">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.UICollectionViewLayoutAttributes) -&gt; Swift.Bool in CollectionView_Layout_Custom.CollectionViewCustomLayout.layoutAttributesForElements(in: __C.CGRect) -&gt; Swift.Optional&lt;Swift.Array&lt;__C.UICollectionViewLayoutAttributes&gt;&gt;"
+                  moduleName = "CollectionView-Layout-Custom"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kawaharadai/xcode%20sorcefile/git%E7%AE%A1%E7%90%86/CollectionView-Layout-Custom/CollectionView-Layout-Custom/Utill/CollectionViewCustomLayout.swift"
+                  timestampString = "572068385.8931659"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "90"
+                  endingLineNumber = "90"
+                  offsetFromSymbolStart = "43">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

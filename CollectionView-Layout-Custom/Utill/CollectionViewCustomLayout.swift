@@ -76,19 +76,23 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
 
     // スクロール領域を決定
     override var collectionViewContentSize: CGSize {
+        // prepareが終わった後に呼ばれるので、計算したcontentHeightを返す
         return CGSize(width: contentWidth, height: contentHeight)
     }
 
     // レイアウト内のオブジェクトの配列を返す（cellやheader等）
     // 画面内のレイアウト属性を決定する
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        // collectionViewが配置処理を行う場所にあるlayoutAttributesを返す（持っているframeの一致を利用して、万が一一致しない場合は配置自体しない）
         // このやり方は一回ごとに全検索をかけるため効率が悪い最初のヒットで拾うようにする
+        // 辞書のkeyで一致もあり？
         return cachedAttributes.filter({ (layoutAttributes) -> Bool in
             rect.intersects(layoutAttributes.frame)
         })
     }
 
     // パーツのindexごとに必要なレイアウト属性を返す（cellもheaderも混ざった状態）
+    // いらないかも
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         return cachedAttributes[indexPath.item]
     }
