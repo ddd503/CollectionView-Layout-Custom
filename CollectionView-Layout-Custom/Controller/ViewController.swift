@@ -29,6 +29,8 @@ final class ViewController: UIViewController {
         }
     }
 
+    var heights: [CGFloat] = [100, 150, 200]
+
     override func viewDidLoad() {
         super.viewDidLoad()
         switch (PhotosDataStore.needsToRequestAccess(), PhotosDataStore.canAccess()) {
@@ -68,7 +70,7 @@ extension ViewController: UICollectionViewDataSource {
 extension ViewController: LayoutDelegate {
 
     func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
-        return 100
+        return heights[Int.random(in: 0..<heights.count)]
     }
 
 }
