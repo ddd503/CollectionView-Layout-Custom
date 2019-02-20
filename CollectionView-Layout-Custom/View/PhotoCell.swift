@@ -30,8 +30,11 @@ final class PhotoCell: UICollectionViewCell {
     }()
 
     func setPhotoImage(asset: PHAsset, imageSize: CGSize) {
-        PHCachingImageManager.default().requestImage(for: asset, targetSize: imageSize, contentMode: .aspectFit, options: options) { [weak self] (image, dic) in
-            self?.imageView.image = image
+        PHCachingImageManager.default().requestImage(for: asset,
+                                                     targetSize: imageSize,
+                                                     contentMode: .aspectFit,
+                                                     options: options) { [weak self] (image, dic) in
+                                                        self?.imageView.image = image
         }
     }
 

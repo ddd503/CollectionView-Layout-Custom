@@ -20,7 +20,6 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
     var contentBounds = CGRect.zero
     // オブジェクトの種類をキャッシュする
     var cachedAttributes = [UICollectionViewLayoutAttributes]()
-
     // 列の数
     private var numberOfColumns = 3
     // セル周囲のスペース
@@ -33,12 +32,11 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         let insets = collectionView.contentInset
         return collectionView.bounds.width - (insets.left + insets.right)
     }
-    // レイアウト準備のため計算を行う
+
     override func prepare() {
         prepareAttributes()
     }
 
-    // スクロール領域を決定
     override var collectionViewContentSize: CGSize {
         // prepareが終わった後に呼ばれるので、計算したcontentHeightを返す
         return CGSize(width: contentWidth, height: contentHeight)
@@ -55,8 +53,6 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         })
     }
 
-    // パーツのindexごとに必要なレイアウト属性を返す（cellもheaderも混ざった状態）
-    // いらないかも
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         return cachedAttributes[indexPath.item]
     }
