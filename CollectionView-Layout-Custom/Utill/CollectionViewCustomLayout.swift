@@ -8,6 +8,13 @@
 
 import UIKit
 
+enum LayoutType {
+    case grid
+    case insta
+    case pintarest
+    case tiktok
+}
+
 // VC側にも準拠
 protocol LayoutDelegate: class {
     func collectionView(_ collectionView:UICollectionView, heightForPhotoAtIndexPath indexPath:IndexPath) -> CGFloat
@@ -34,7 +41,7 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
     }
 
     override func prepare() {
-        prepareAttributes()
+        prepareInsta()
     }
 
     override var collectionViewContentSize: CGSize {
