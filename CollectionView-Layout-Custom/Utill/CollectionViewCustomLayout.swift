@@ -129,15 +129,15 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         }
         var cellYOffsets = [CGFloat](repeating: 0, count: numberOfColumns)
         var currentColumnNumber = 0
-        var currentItemPositionNumber = 0
 
         (0 ..< collectionView.numberOfItems(inSection: 0)).forEach {
             let indexPath = IndexPath(item: $0, section: 0)
             var cellFrame: CGRect = .zero
             var cellLength: CGFloat = 0
-            currentItemPositionNumber = ($0 > layoutBaseNumber) ? 0 : layoutBaseNumber - (layoutBaseNumber - $0)
-
-            switch currentItemPositionNumber {
+            // 配置場所を表す番号
+            let cellNumber = $0 % (layoutBaseNumber + 1)
+            
+            switch cellNumber {
             case 0:
                 cellLength = baseLength * 2
                 cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
