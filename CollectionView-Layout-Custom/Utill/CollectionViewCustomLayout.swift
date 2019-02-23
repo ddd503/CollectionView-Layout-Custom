@@ -48,6 +48,8 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         switch type {
         case .grid:
             gridAttributes()
+        case .insta:
+            instaAttributes()
         default:
             break
         }
@@ -73,7 +75,8 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         return cachedAttributes[indexPath.item]
     }
 
-    private func gridAttributes() {
+    // baseLayout
+    private func baseAttributes() {
         guard cachedAttributes.isEmpty, let collectionView = collectionView else { return }
         let cellWidth = contentWidth / CGFloat(numberOfColumns)
         let cellXOffsets = (0 ..< numberOfColumns).map {
@@ -92,6 +95,97 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
             cachedAttributes.append(attributes)
             contentHeight = max(contentHeight, cellFrame.maxY)
             cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellHeight
+            currentColumnNumber = currentColumnNumber < (numberOfColumns - 1) ? currentColumnNumber + 1 : 0
+        }
+    }
+
+    private func gridAttributes() {
+        guard cachedAttributes.isEmpty, let collectionView = collectionView else { return }
+        let cellLength = contentWidth / CGFloat(numberOfColumns)
+        let cellXOffsets = (0 ..< numberOfColumns).map {
+            CGFloat($0) * cellLength
+        }
+        var cellYOffsets = [CGFloat](repeating: 0, count: numberOfColumns)
+        var currentColumnNumber = 0
+        (0 ..< collectionView.numberOfItems(inSection: 0)).forEach {
+            let indexPath = IndexPath(item: $0, section: 0)
+            let cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
+            let itemFrame = cellFrame.insetBy(dx: cellPadding, dy: cellPadding)
+            let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
+            attributes.frame = itemFrame
+            cachedAttributes.append(attributes)
+            contentHeight = max(contentHeight, cellFrame.maxY)
+            cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellLength
+            currentColumnNumber = currentColumnNumber < (numberOfColumns - 1) ? currentColumnNumber + 1 : 0
+        }
+    }
+
+    private func instaAttributes() {
+        let layoutBaseNumber = 17
+        guard cachedAttributes.isEmpty, let collectionView = collectionView else { return }
+        let baseLength = contentWidth / CGFloat(numberOfColumns)
+        let cellXOffsets = (0 ..< numberOfColumns).map {
+            CGFloat($0) * baseLength
+        }
+        var cellYOffsets = [CGFloat](repeating: 0, count: numberOfColumns)
+        var currentColumnNumber = 0
+        var currentItemPositionNumber = 0
+
+        (0 ..< collectionView.numberOfItems(inSection: 0)).forEach {
+            let indexPath = IndexPath(item: $0, section: 0)
+            var cellFrame: CGRect = .zero
+            var cellLength: CGFloat = 0
+            currentItemPositionNumber = ($0 > layoutBaseNumber) ? 0 : layoutBaseNumber - (layoutBaseNumber - $0)
+
+            switch currentItemPositionNumber {
+            case 0:
+                print("left big")
+                cellLength = baseLength * 2
+                cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
+                cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellLength
+                print(cellFrame)
+            case 1:
+                print("upper right")
+                cellLength = baseLength
+                cellFrame = CGRect(x: cellXOffsets[currentColumnNumber + 1], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
+                cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + (cellLength * 2)
+                print(cellFrame)
+            case 2:
+                print("lowwer right")
+                print("upper right")
+                cellLength = baseLength
+                cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber] + baseLength, width: cellLength, height: cellLength)
+                cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + (cellLength * 2)
+                print(cellFrame)
+            case 9:
+                cellLength = baseLength
+                cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
+                cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + (cellLength * 2)
+                print(cellFrame)
+            case 10:
+                print("right big")
+                cellLength = baseLength * 2
+                cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
+                cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellLength
+                print(cellFrame)
+            case 11:
+                print("lowwer left")
+                cellLength = baseLength
+                cellFrame = CGRect(x: cellXOffsets[currentColumnNumber - 2], y: cellYOffsets[currentColumnNumber] + baseLength, width: cellLength, height: cellLength)
+                cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + (cellLength * 2)
+                print(cellFrame)
+            default:
+                print("other")
+                cellLength = baseLength
+                cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
+                cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellLength
+                print(cellFrame)
+            }
+            let itemFrame = cellFrame.insetBy(dx: cellPadding, dy: cellPadding)
+            let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
+            attributes.frame = itemFrame
+            cachedAttributes.append(attributes)
+            contentHeight = max(contentHeight, cellFrame.maxY)
             currentColumnNumber = currentColumnNumber < (numberOfColumns - 1) ? currentColumnNumber + 1 : 0
         }
     }

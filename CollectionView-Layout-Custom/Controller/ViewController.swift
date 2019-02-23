@@ -21,7 +21,7 @@ final class ViewController: UIViewController {
         }
     }
 
-    var collectionViewCurrentLayout: LayoutType = .grid
+    var collectionViewCurrentLayout: LayoutType = .insta
 
     var assets: PHFetchResult<PHAsset> = PHFetchResult() {
         didSet {
