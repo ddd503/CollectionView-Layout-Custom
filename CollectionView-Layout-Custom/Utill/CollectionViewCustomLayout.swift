@@ -139,20 +139,16 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
 
             switch currentItemPositionNumber {
             case 0:
-                print("left big")
                 cellLength = baseLength * 2
                 cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
                 cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellLength
                 print(cellFrame)
             case 1:
-                print("upper right")
                 cellLength = baseLength
                 cellFrame = CGRect(x: cellXOffsets[currentColumnNumber + 1], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
                 cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + (cellLength * 2)
                 print(cellFrame)
             case 2:
-                print("lowwer right")
-                print("upper right")
                 cellLength = baseLength
                 cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber] + baseLength, width: cellLength, height: cellLength)
                 cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + (cellLength * 2)
@@ -163,19 +159,16 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
                 cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + (cellLength * 2)
                 print(cellFrame)
             case 10:
-                print("right big")
                 cellLength = baseLength * 2
                 cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
                 cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellLength
                 print(cellFrame)
             case 11:
-                print("lowwer left")
                 cellLength = baseLength
                 cellFrame = CGRect(x: cellXOffsets[currentColumnNumber - 2], y: cellYOffsets[currentColumnNumber] + baseLength, width: cellLength, height: cellLength)
                 cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + (cellLength * 2)
                 print(cellFrame)
             default:
-                print("other")
                 cellLength = baseLength
                 cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
                 cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellLength
