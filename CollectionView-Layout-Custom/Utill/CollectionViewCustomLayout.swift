@@ -17,6 +17,7 @@ enum LayoutType {
 
 // VC側にも準拠
 protocol LayoutDelegate: class {
+    func layoutType() -> LayoutType
     func collectionView(_ collectionView:UICollectionView, heightForPhotoAtIndexPath indexPath:IndexPath) -> CGFloat
 }
 
@@ -41,7 +42,15 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
     }
 
     override func prepare() {
-        prepareInsta()
+        guard let type = delegate?.layoutType() else {
+            return
+        }
+        switch type {
+        case .grid:
+            gridAttributes()
+        default:
+            break
+        }
     }
 
     override var collectionViewContentSize: CGSize {
@@ -64,7 +73,7 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         return cachedAttributes[indexPath.item]
     }
 
-    private func prepareAttributes() {
+    private func gridAttributes() {
         guard cachedAttributes.isEmpty, let collectionView = collectionView else { return }
         let cellWidth = contentWidth / CGFloat(numberOfColumns)
         let cellXOffsets = (0 ..< numberOfColumns).map {

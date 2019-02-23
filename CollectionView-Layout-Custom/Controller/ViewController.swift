@@ -21,6 +21,8 @@ final class ViewController: UIViewController {
         }
     }
 
+    var collectionViewCurrentLayout: LayoutType = .grid
+
     var assets: PHFetchResult<PHAsset> = PHFetchResult() {
         didSet {
             DispatchQueue.main.async {
@@ -68,6 +70,10 @@ extension ViewController: UICollectionViewDataSource {
 }
 
 extension ViewController: LayoutDelegate {
+
+    func layoutType() -> LayoutType {
+        return collectionViewCurrentLayout
+    }
 
     func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
         return heights[Int.random(in: 0..<heights.count)]
