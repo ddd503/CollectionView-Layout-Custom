@@ -15,13 +15,43 @@ enum LayoutType {
     case tiktok
 }
 
-enum InstaLayoutItemType: Int {
-    case leftBigBox = 0
-    case rightUpperSide = 1
-    case rightLowerSide = 2
-    case leftUpperSide = 9
-    case rightBigBox = 10
-    case leftLowerSide = 11
+enum InstaLayoutItemType {
+    case leftBigBox
+    case rightUpperSide
+    case rightLowerSide
+    case leftUpperSide
+    case rightBigBox
+    case leftLowerSide
+    case other
+
+    init(itemNumber: Int) {
+        switch itemNumber {
+        case 0:
+            self = .leftBigBox
+        case 1:
+            self = .rightUpperSide
+        case 2:
+            self = .rightLowerSide
+        case 9:
+            self = .leftUpperSide
+        case 10:
+            self = .rightBigBox
+        case 11:
+            self = .leftLowerSide
+        default:
+            self = .other
+        }
+    }
+
+    var isAddMoreYOffsets: Bool {
+        switch self {
+        case .rightUpperSide, .rightLowerSide, .leftUpperSide, .leftLowerSide:
+            return true
+        default:
+            return false
+        }
+    }
+
 }
 
 // VC側にも準拠
@@ -143,40 +173,25 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         (0 ..< collectionView.numberOfItems(inSection: 0)).forEach {
             let indexPath = IndexPath(item: $0, section: 0)
             var cellFrame: CGRect = .zero
-            var cellLength: CGFloat = 0
             // 配置場所を表す番号
-            let cellNumber = $0 % (layoutBaseNumber + 1)
-            
-            switch cellNumber {
-            case InstaLayoutItemType.leftBigBox.rawValue:
-                cellLength = baseLength * 2
-                cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
-                cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellLength
-            case InstaLayoutItemType.rightUpperSide.rawValue:
-                cellLength = baseLength
-                cellFrame = CGRect(x: cellXOffsets[currentColumnNumber + 1], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
-                cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + (cellLength * 2)
-            case InstaLayoutItemType.rightLowerSide.rawValue:
-                cellLength = baseLength
-                cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber] + baseLength, width: cellLength, height: cellLength)
-                cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + (cellLength * 2)
-            case InstaLayoutItemType.leftUpperSide.rawValue:
-                cellLength = baseLength
-                cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
-                cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + (cellLength * 2)
-            case InstaLayoutItemType.rightBigBox.rawValue:
-                cellLength = baseLength * 2
-                cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
-                cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellLength
-            case InstaLayoutItemType.leftLowerSide.rawValue:
-                cellLength = baseLength
-                cellFrame = CGRect(x: cellXOffsets[currentColumnNumber - 2], y: cellYOffsets[currentColumnNumber] + baseLength, width: cellLength, height: cellLength)
-                cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + (cellLength * 2)
-            default:
-                cellLength = baseLength
-                cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
-                cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellLength
+            let itemNumber = $0 % (layoutBaseNumber + 1)
+            let itemLayoutType = InstaLayoutItemType(itemNumber: itemNumber)
+            switch itemLayoutType {
+            case .leftBigBox, .rightBigBox:
+                cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: baseLength * 2, height: baseLength * 2)
+            case .rightUpperSide:
+                cellFrame = CGRect(x: cellXOffsets[currentColumnNumber + 1], y: cellYOffsets[currentColumnNumber], width: baseLength, height: baseLength)
+            case .rightLowerSide:
+                cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber] + baseLength, width: baseLength, height: baseLength)
+            case .leftUpperSide:
+                cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: baseLength, height: baseLength)
+            case .leftLowerSide:
+                cellFrame = CGRect(x: cellXOffsets[currentColumnNumber - 2], y: cellYOffsets[currentColumnNumber] + baseLength, width: baseLength, height: baseLength)
+            case .other:
+                cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: baseLength, height: baseLength)
             }
+            // カラムごとのy軸の開始位置を調節
+            cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + ((itemLayoutType.isAddMoreYOffsets) ?  cellFrame.size.height * 2 :  cellFrame.size.height)
             let itemFrame = cellFrame.insetBy(dx: cellPadding, dy: cellPadding)
             let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
             attributes.frame = itemFrame
