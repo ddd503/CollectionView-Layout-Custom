@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CollectionView-Layout-Custom/Utill/CollectionViewCustomLayout.swift"
-            timestampString = "572680878.465029"
+            timestampString = "572681960.02631"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "69"
-            endingLineNumber = "69"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
             landmarkName = "layoutAttributesForElements(in:)"
             landmarkType = "7">
             <Locations>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CollectionView-Layout-Custom/Utill/CollectionViewCustomLayout.swift"
-            timestampString = "572680878.4651411"
+            timestampString = "572681960.0271291"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "155"
-            endingLineNumber = "155"
+            startingLineNumber = "163"
+            endingLineNumber = "163"
             landmarkName = "instaAttributes()"
             landmarkType = "7">
          </BreakpointContent>
@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CollectionView-Layout-Custom/Utill/CollectionViewCustomLayout.swift"
-            timestampString = "572680878.4652081"
+            timestampString = "572681960.027645"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "168"
-            endingLineNumber = "168"
+            startingLineNumber = "173"
+            endingLineNumber = "173"
             landmarkName = "instaAttributes()"
             landmarkType = "7">
          </BreakpointContent>

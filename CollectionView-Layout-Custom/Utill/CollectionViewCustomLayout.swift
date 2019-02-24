@@ -15,6 +15,15 @@ enum LayoutType {
     case tiktok
 }
 
+enum InstaLayoutItemType: Int {
+    case leftBigBox = 0
+    case rightUpperSide = 1
+    case rightLowerSide = 2
+    case leftUpperSide = 9
+    case rightBigBox = 10
+    case leftLowerSide = 11
+}
+
 // VC側にも準拠
 protocol LayoutDelegate: class {
     func layoutType() -> LayoutType
@@ -121,8 +130,9 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
     }
 
     private func instaAttributes() {
-        let layoutBaseNumber = 17
         guard cachedAttributes.isEmpty, let collectionView = collectionView else { return }
+        // 1ブロック区切りに入るセルの数
+        let layoutBaseNumber = 17
         let baseLength = contentWidth / CGFloat(numberOfColumns)
         let cellXOffsets = (0 ..< numberOfColumns).map {
             CGFloat($0) * baseLength
@@ -138,41 +148,34 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
             let cellNumber = $0 % (layoutBaseNumber + 1)
             
             switch cellNumber {
-            case 0:
+            case InstaLayoutItemType.leftBigBox.rawValue:
                 cellLength = baseLength * 2
                 cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
                 cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellLength
-                print(cellFrame)
-            case 1:
+            case InstaLayoutItemType.rightUpperSide.rawValue:
                 cellLength = baseLength
                 cellFrame = CGRect(x: cellXOffsets[currentColumnNumber + 1], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
                 cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + (cellLength * 2)
-                print(cellFrame)
-            case 2:
+            case InstaLayoutItemType.rightLowerSide.rawValue:
                 cellLength = baseLength
                 cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber] + baseLength, width: cellLength, height: cellLength)
                 cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + (cellLength * 2)
-                print(cellFrame)
-            case 9:
+            case InstaLayoutItemType.leftUpperSide.rawValue:
                 cellLength = baseLength
                 cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
                 cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + (cellLength * 2)
-                print(cellFrame)
-            case 10:
+            case InstaLayoutItemType.rightBigBox.rawValue:
                 cellLength = baseLength * 2
                 cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
                 cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellLength
-                print(cellFrame)
-            case 11:
+            case InstaLayoutItemType.leftLowerSide.rawValue:
                 cellLength = baseLength
                 cellFrame = CGRect(x: cellXOffsets[currentColumnNumber - 2], y: cellYOffsets[currentColumnNumber] + baseLength, width: cellLength, height: cellLength)
                 cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + (cellLength * 2)
-                print(cellFrame)
             default:
                 cellLength = baseLength
                 cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
                 cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellLength
-                print(cellFrame)
             }
             let itemFrame = cellFrame.insetBy(dx: cellPadding, dy: cellPadding)
             let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
