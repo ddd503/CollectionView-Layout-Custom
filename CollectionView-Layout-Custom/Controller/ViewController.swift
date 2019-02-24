@@ -63,7 +63,7 @@ extension ViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.identifier, for: indexPath) as? PhotoCell else { fatalError() }
-        cell.setPhotoImage(asset: assets[indexPath.item], imageSize: cellImageSize())
+        cell.setupPhotoCell(asset: assets[indexPath.item], imageSize: cellImageSize(), layoutType: collectionViewCurrentLayout)
         return cell
     }
 

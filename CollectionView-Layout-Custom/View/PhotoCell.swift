@@ -29,13 +29,28 @@ final class PhotoCell: UICollectionViewCell {
         return options
     }()
 
-    func setPhotoImage(asset: PHAsset, imageSize: CGSize) {
-        PHCachingImageManager.default().requestImage(for: asset,
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.imageView.image = nil
+    }
+
+    func setupPhotoCell(asset: PHAsset, imageSize: CGSize, layoutType: LayoutType) {
+        switch layoutType {
+        case .pintarest:
+            setLayer(cornerRadius: 5)
+        default: break
+        }
+        PHImageManager.default().requestImage(for: asset,
                                                      targetSize: imageSize,
                                                      contentMode: .aspectFit,
                                                      options: options) { [weak self] (image, dic) in
                                                         self?.imageView.image = image
         }
+    }
+
+    func setLayer(cornerRadius: CGFloat) {
+        imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = cornerRadius
     }
 
 }

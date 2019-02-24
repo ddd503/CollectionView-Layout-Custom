@@ -29,7 +29,7 @@
                         <constraints>
                             <constraint firstItem="xeL-Cw-dvY" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="G36-eh-uqS"/>
                             <constraint firstItem="xeL-Cw-dvY" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="m8A-Yd-qfq"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="xeL-Cw-dvY" secondAttribute="bottom" id="o1W-A7-o4R"/>
+                            <constraint firstAttribute="bottom" secondItem="xeL-Cw-dvY" secondAttribute="bottom" id="o1W-A7-o4R"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="xeL-Cw-dvY" secondAttribute="trailing" id="oqd-eo-bYr"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
