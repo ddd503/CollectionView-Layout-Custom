@@ -49,8 +49,8 @@ final class ViewController: UIViewController {
     }
 
     private func cellImageSize() -> CGSize {
-        let width = self.collectionView.bounds.size.width / 2
-        return CGSize(width: width, height: 70)
+        let width = UIScreen.main.bounds.size.width
+        return CGSize(width: width, height: width)
     }
 
 }
