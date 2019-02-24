@@ -153,30 +153,18 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         }
     }
 
-    // MARK: - Create Attributes
+    // MARK: - Setup Attributes
 
-    // baseLayout
-    private func baseAttributes() {
-        guard cachedAttributes.isEmpty, let collectionView = collectionView else { return }
-        let cellWidth = contentWidth / CGFloat(numberOfColumns)
-        let cellXOffsets = (0 ..< numberOfColumns).map {
-            CGFloat($0) * cellWidth
-        }
-        var cellYOffsets = [CGFloat](repeating: 0, count: numberOfColumns)
-        var currentColumnNumber = 0
-        (0 ..< collectionView.numberOfItems(inSection: 0)).forEach {
-            let indexPath = IndexPath(item: $0, section: 0)
-            let itemHeight = delegate?.collectionView(collectionView, heightForPhotoAtIndexPath: indexPath) ?? 0
-            let cellHeight = cellPadding * 2 + itemHeight
-            let cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellWidth, height: cellHeight)
-            let itemFrame = cellFrame.insetBy(dx: cellPadding, dy: cellPadding)
-            let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-            attributes.frame = itemFrame
-            cachedAttributes.append(attributes)
-            contentHeight = max(contentHeight, cellFrame.maxY)
-            cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellHeight
-            currentColumnNumber = currentColumnNumber < (numberOfColumns - 1) ? currentColumnNumber + 1 : 0
-        }
+    // セルの配置を決定後に施す共通処理
+    private func addAttributes(cellFrame: CGRect, indexPath: IndexPath) {
+        // セルの内側にスペースを入れる
+        let itemFrame = cellFrame.insetBy(dx: cellPadding, dy: cellPadding)
+        // Attributesを追加
+        let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
+        attributes.frame = itemFrame
+        cachedAttributes.append(attributes)
+        // ContentSizeを更新
+        contentHeight = max(contentHeight, cellFrame.maxY)
     }
 
     private func gridAttributes() {
@@ -191,14 +179,9 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
             let indexPath = IndexPath(item: $0, section: 0)
             let cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
             cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellLength
-
-            // 以降、共通処理でまとめられるかも
-            let itemFrame = cellFrame.insetBy(dx: cellPadding, dy: cellPadding)
-            let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-            attributes.frame = itemFrame
-            cachedAttributes.append(attributes)
-            contentHeight = max(contentHeight, cellFrame.maxY)
             currentColumnNumber = currentColumnNumber < (numberOfColumns - 1) ? currentColumnNumber + 1 : 0
+
+            addAttributes(cellFrame: cellFrame, indexPath: indexPath)
         }
     }
 
@@ -235,18 +218,15 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
             }
             // カラムごとのy軸の開始位置を調節
             cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + ((itemLayoutType.isAddMoreYOffsets) ?  cellFrame.size.height * 2 :  cellFrame.size.height)
-            let itemFrame = cellFrame.insetBy(dx: cellPadding, dy: cellPadding)
-            let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-            attributes.frame = itemFrame
-            cachedAttributes.append(attributes)
-            contentHeight = max(contentHeight, cellFrame.maxY)
             currentColumnNumber = currentColumnNumber < (numberOfColumns - 1) ? currentColumnNumber + 1 : 0
+
+            addAttributes(cellFrame: cellFrame, indexPath: indexPath)
         }
     }
 
     private func pintarestAttributes() {
         // 本来は画像が持つ高さを使うが、今回は擬似的に用意
-        let heights: [CGFloat] = [200, 185, 170, 155, 140, 125]
+        let heights: [CGFloat] = [200, 180, 160, 140, 120]
         var currentHeights = heights
         guard cachedAttributes.isEmpty, let collectionView = collectionView else { return }
         let cellWidth = contentWidth / CGFloat(numberOfColumns)
@@ -278,14 +258,9 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
             currentHeights.remove(at: heightsNumber)
             let cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellWidth, height: cellHeight)
             cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellHeight
-
-            // 以降、共通処理でまとめられるかも
-            let itemFrame = cellFrame.insetBy(dx: cellPadding, dy: cellPadding)
-            let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-            attributes.frame = itemFrame
-            cachedAttributes.append(attributes)
-            contentHeight = max(contentHeight, cellFrame.maxY)
             currentColumnNumber = currentColumnNumber < (numberOfColumns - 1) ? currentColumnNumber + 1 : 0
+
+            addAttributes(cellFrame: cellFrame, indexPath: indexPath)
         }
     }
 
