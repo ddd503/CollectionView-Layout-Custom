@@ -82,7 +82,7 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
     private lazy var cellPadding = { () -> CGFloat in
         switch self.currentLayoutType {
         case .pintarest:
-            return 5
+            return 7
         default:
             return 1
         }
@@ -134,7 +134,7 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         var inset = UIEdgeInsets.zero
         switch type {
         case .pintarest:
-            inset = UIEdgeInsets(top: 2.5, left: 2.5, bottom: 2.5, right: 2.5)
+            inset = UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7)
         default: break
         }
         collectionView.contentInset = inset
@@ -246,18 +246,25 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
 
     private func pintarestAttributes() {
         // 本来は画像が持つ高さを使うが、今回は擬似的に用意
-        var heights: [CGFloat] = [200, 180, 160, 140, 120, 100]
+        let heights: [CGFloat] = [200, 180, 160, 140, 120, 100]
+        var currentHeights = heights
         guard cachedAttributes.isEmpty, let collectionView = collectionView else { return }
-        let cellLength = contentWidth / CGFloat(numberOfColumns)
+        let cellWidth = contentWidth / CGFloat(numberOfColumns)
         let cellXOffsets = (0 ..< numberOfColumns).map {
-            CGFloat($0) * cellLength
+            CGFloat($0) * cellWidth
         }
         var cellYOffsets = [CGFloat](repeating: 0, count: numberOfColumns)
         var currentColumnNumber = 0
         (0 ..< collectionView.numberOfItems(inSection: 0)).forEach {
             let indexPath = IndexPath(item: $0, section: 0)
-            let cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
-            cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellLength
+            if currentHeights.isEmpty {
+                currentHeights = heights
+            }
+            let heightsNumber = Int.random(in: 0 ..< currentHeights.count)
+            let cellHeight = currentHeights[heightsNumber]
+            currentHeights.remove(at: heightsNumber)
+            let cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellWidth, height: cellHeight)
+            cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellHeight
 
             // 以降、共通処理でまとめられるかも
             let itemFrame = cellFrame.insetBy(dx: cellPadding, dy: cellPadding)
