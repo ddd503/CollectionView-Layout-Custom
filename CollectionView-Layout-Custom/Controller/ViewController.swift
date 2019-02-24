@@ -23,13 +23,7 @@ final class ViewController: UIViewController {
 
     var collectionViewCurrentLayout: LayoutType = .pintarest
 
-    var assets: PHFetchResult<PHAsset> = PHFetchResult() {
-        didSet {
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
-        }
-    }
+    var assets: PHFetchResult<PHAsset> = PHFetchResult()
 
     var heights: [CGFloat] = [100, 150, 200]
 
@@ -39,6 +33,9 @@ final class ViewController: UIViewController {
         case (true, _):
             PhotosDataStore.requestAuthorization { [weak self] (success) in
                 self?.assets = PhotosDataStore.requestAssets()
+                DispatchQueue.main.async {
+                    self?.collectionView.reloadData()
+                }
             }
         case (_, true):
             assets = PhotosDataStore.requestAssets()
