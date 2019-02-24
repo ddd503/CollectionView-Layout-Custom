@@ -262,13 +262,18 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
             }
             let heightsNumber = Int.random(in: 0 ..< currentHeights.count)
             var cellHeight = currentHeights[heightsNumber]
+            let currentColumnYOffsets = cellYOffsets[currentColumnNumber]
+            let nextColumnYOffsets = cellYOffsets[currentColumnNumber < (numberOfColumns - 1) ? currentColumnNumber + 1 : 0]
+            let offsets = [currentColumnYOffsets, nextColumnYOffsets]
+            let maxLength = heights.max() ?? 0
+            let minLength = heights.min() ?? 0
+            let different = (offsets.max() ?? 0) - (offsets.min() ?? 0)
             let isLastItem = ($0 == collectionView.numberOfItems(inSection: 0) - 1)
             if isLastItem {
-                let offsets = [cellYOffsets[currentColumnNumber], cellYOffsets[currentColumnNumber < (numberOfColumns - 1) ? currentColumnNumber + 1 : 0]]
-                let maxLength = heights.max() ?? 0
-                let minLength = heights.min() ?? 0
-                let different = (offsets.max() ?? 0) - (offsets.min() ?? 0)
                 cellHeight = (different > maxLength) ? maxLength : (minLength > different) ? minLength : different
+            }
+            if different > maxLength {
+                cellHeight = currentColumnYOffsets > nextColumnYOffsets ? minLength : maxLength
             }
             currentHeights.remove(at: heightsNumber)
             let cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellWidth, height: cellHeight)
