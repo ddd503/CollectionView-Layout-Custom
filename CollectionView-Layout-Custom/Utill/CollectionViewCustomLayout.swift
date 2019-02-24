@@ -81,9 +81,7 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
     }
 
     override func prepare() {
-        guard let type = delegate?.layoutType() else {
-            return
-        }
+        guard let type = delegate?.layoutType() else { return }
         switch type {
         case .grid:
             gridAttributes()
@@ -149,12 +147,14 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         (0 ..< collectionView.numberOfItems(inSection: 0)).forEach {
             let indexPath = IndexPath(item: $0, section: 0)
             let cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
+            cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellLength
+
+            // 以降、共通処理でまとめられるかも
             let itemFrame = cellFrame.insetBy(dx: cellPadding, dy: cellPadding)
             let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
             attributes.frame = itemFrame
             cachedAttributes.append(attributes)
             contentHeight = max(contentHeight, cellFrame.maxY)
-            cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellLength
             currentColumnNumber = currentColumnNumber < (numberOfColumns - 1) ? currentColumnNumber + 1 : 0
         }
     }
