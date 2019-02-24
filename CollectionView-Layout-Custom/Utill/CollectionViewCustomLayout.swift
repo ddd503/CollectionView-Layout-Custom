@@ -246,7 +246,7 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
 
     private func pintarestAttributes() {
         // 本来は画像が持つ高さを使うが、今回は擬似的に用意
-        let heights: [CGFloat] = [200, 180, 160, 140, 120, 100]
+        let heights: [CGFloat] = [200, 185, 170, 155, 140, 125]
         var currentHeights = heights
         guard cachedAttributes.isEmpty, let collectionView = collectionView else { return }
         let cellWidth = contentWidth / CGFloat(numberOfColumns)
@@ -261,7 +261,15 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
                 currentHeights = heights
             }
             let heightsNumber = Int.random(in: 0 ..< currentHeights.count)
-            let cellHeight = currentHeights[heightsNumber]
+            var cellHeight = currentHeights[heightsNumber]
+            let isLastItem = ($0 == collectionView.numberOfItems(inSection: 0) - 1)
+            if isLastItem {
+                let offsets = [cellYOffsets[currentColumnNumber], cellYOffsets[currentColumnNumber < (numberOfColumns - 1) ? currentColumnNumber + 1 : 0]]
+                let maxLength = heights.max() ?? 0
+                let minLength = heights.min() ?? 0
+                let different = (offsets.max() ?? 0) - (offsets.min() ?? 0)
+                cellHeight = (different > maxLength) ? maxLength : (minLength > different) ? minLength : different
+            }
             currentHeights.remove(at: heightsNumber)
             let cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellWidth, height: cellHeight)
             cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellHeight
