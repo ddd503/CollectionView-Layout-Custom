@@ -21,7 +21,9 @@ final class ViewController: UIViewController {
         }
     }
 
-    var collectionViewCurrentLayout: LayoutType = .tiktok
+    @IBOutlet private weak var segmentedControl: UISegmentedControl!
+
+    var collectionViewCurrentLayout: LayoutType = .grid
 
     var assets: PHFetchResult<PHAsset> = PHFetchResult()
 
@@ -41,6 +43,15 @@ final class ViewController: UIViewController {
             // status is restricted or denied
             fatalError("have no permission")
         }
+    }
+
+    @IBAction func tapSegment(_ sender: UISegmentedControl) {
+        guard let layout = LayoutType(rawValue: sender.selectedSegmentIndex) else {
+            sender.selectedSegmentIndex = 0
+            return
+        }
+        collectionViewCurrentLayout = layout
+        collectionView.reloadData()
     }
 
     private func cellImageSize() -> CGSize {

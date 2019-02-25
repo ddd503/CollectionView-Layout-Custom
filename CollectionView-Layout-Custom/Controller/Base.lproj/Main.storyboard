@@ -19,16 +19,34 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="xeL-Cw-dvY">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="114" width="375" height="553"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewLayout key="collectionViewLayout" id="H1C-kL-Bbm" customClass="CollectionViewCustomLayout" customModule="CollectionView_Layout_Custom"/>
                                 <cells/>
                             </collectionView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="qEL-Dn-BY0">
+                                <rect key="frame" x="20" y="74" width="335" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="lqF-oU-ddh"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="Grid"/>
+                                    <segment title="Insta"/>
+                                    <segment title="Pintarest"/>
+                                    <segment title="Tiktok"/>
+                                </segments>
+                                <connections>
+                                    <action selector="tapSegment:" destination="BYZ-38-t0r" eventType="valueChanged" id="1Lh-hF-eHh"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="qEL-Dn-BY0" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="927-h3-1gT"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="qEL-Dn-BY0" secondAttribute="trailing" constant="20" id="C3r-Jv-33M"/>
                             <constraint firstItem="xeL-Cw-dvY" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="G36-eh-uqS"/>
-                            <constraint firstItem="xeL-Cw-dvY" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="m8A-Yd-qfq"/>
+                            <constraint firstItem="xeL-Cw-dvY" firstAttribute="top" secondItem="qEL-Dn-BY0" secondAttribute="bottom" constant="10" id="P4V-2R-DtY"/>
+                            <constraint firstItem="qEL-Dn-BY0" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="k9h-FO-UFu"/>
                             <constraint firstAttribute="bottom" secondItem="xeL-Cw-dvY" secondAttribute="bottom" id="o1W-A7-o4R"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="xeL-Cw-dvY" secondAttribute="trailing" id="oqd-eo-bYr"/>
                         </constraints>
@@ -37,6 +55,7 @@
                     <navigationItem key="navigationItem" title="CollectionView-CustomLayout-Sample" id="U5g-CD-eRh"/>
                     <connections>
                         <outlet property="collectionView" destination="xeL-Cw-dvY" id="VHt-gK-tmQ"/>
+                        <outlet property="segmentedControl" destination="qEL-Dn-BY0" id="VHr-5g-DlI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

@@ -8,11 +8,11 @@
 
 import UIKit
 
-enum LayoutType {
+enum LayoutType: Int {
     case grid
     case insta
     case pintarest
-    case tiktok // これやる
+    case tiktok
 }
 
 enum InstaLayoutItemType {
@@ -67,30 +67,8 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
     // MARK: - Private Propaty
 
     private var contentBounds = CGRect.zero
-    // オブジェクトの種類をキャッシュする
+    // オブジェクト属性をキャッシュする
     private var cachedAttributes = [UICollectionViewLayoutAttributes]()
-    // 列の数
-    private lazy var numberOfColumns = { () -> Int in
-        switch self.currentLayoutType {
-        case .pintarest:
-            return 2
-        case .tiktok:
-            return 1
-        default:
-            return 3
-        }
-    }()
-    // セル周囲のスペース
-    private lazy var cellPadding = { () -> CGFloat in
-        switch self.currentLayoutType {
-        case .pintarest:
-            return 7
-        case .tiktok:
-            return 0
-        default:
-            return 1
-        }
-    }()
     // レイアウトの総Height
     private var contentHeight: CGFloat = 0
     // レイアウトの総Width
@@ -106,6 +84,7 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
 
     override func prepare() {
         guard let layoutType = delegate?.layoutType() else { return }
+        resetAttributes()
         currentLayoutType = layoutType
         setupCollectionViewInset(layoutType: layoutType)
         setupCollectionViewScrollType(layoutType: layoutType)
@@ -168,12 +147,44 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         }
     }
 
+    private func resetAttributes() {
+        cachedAttributes = []
+        contentHeight = 0
+        collectionView?.contentOffset.y = 0
+    }
+
+    // MARK: - Private Setting Value
+
+    // 列の数
+    private func numberOfColumns() -> Int {
+        switch self.currentLayoutType {
+        case .pintarest:
+            return 2
+        case .tiktok:
+            return 1
+        default:
+            return 3
+        }
+    }
+
+    // セル周囲のスペース
+    private func cellPadding() -> CGFloat {
+        switch self.currentLayoutType {
+        case .pintarest:
+            return 7
+        case .tiktok:
+            return 0
+        default:
+            return 1
+        }
+    }
+
     // MARK: - Setup Attributes
 
     // セルの配置を決定後に施す共通処理
     private func addAttributes(cellFrame: CGRect, indexPath: IndexPath) {
         // セルの内側にスペースを入れる
-        let itemFrame = cellFrame.insetBy(dx: cellPadding, dy: cellPadding)
+        let itemFrame = cellFrame.insetBy(dx: cellPadding(), dy: cellPadding())
         // Attributesを追加
         let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
         attributes.frame = itemFrame
@@ -184,17 +195,17 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
 
     private func gridAttributes() {
         guard cachedAttributes.isEmpty, let collectionView = collectionView else { return }
-        let cellLength = contentWidth / CGFloat(numberOfColumns)
-        let cellXOffsets = (0 ..< numberOfColumns).map {
+        let cellLength = contentWidth / CGFloat(numberOfColumns())
+        let cellXOffsets = (0 ..< numberOfColumns()).map {
             CGFloat($0) * cellLength
         }
-        var cellYOffsets = [CGFloat](repeating: 0, count: numberOfColumns)
+        var cellYOffsets = [CGFloat](repeating: 0, count: numberOfColumns())
         var currentColumnNumber = 0
         (0 ..< collectionView.numberOfItems(inSection: 0)).forEach {
             let indexPath = IndexPath(item: $0, section: 0)
             let cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellLength, height: cellLength)
             cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellLength
-            currentColumnNumber = currentColumnNumber < (numberOfColumns - 1) ? currentColumnNumber + 1 : 0
+            currentColumnNumber = currentColumnNumber < (numberOfColumns() - 1) ? currentColumnNumber + 1 : 0
 
             addAttributes(cellFrame: cellFrame, indexPath: indexPath)
         }
@@ -204,11 +215,11 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         guard cachedAttributes.isEmpty, let collectionView = collectionView else { return }
         // 1ブロック区切りに入るセルの数
         let layoutBaseNumber = 17
-        let baseLength = contentWidth / CGFloat(numberOfColumns)
-        let cellXOffsets = (0 ..< numberOfColumns).map {
+        let baseLength = contentWidth / CGFloat(numberOfColumns())
+        let cellXOffsets = (0 ..< numberOfColumns()).map {
             CGFloat($0) * baseLength
         }
-        var cellYOffsets = [CGFloat](repeating: 0, count: numberOfColumns)
+        var cellYOffsets = [CGFloat](repeating: 0, count: numberOfColumns())
         var currentColumnNumber = 0
 
         (0 ..< collectionView.numberOfItems(inSection: 0)).forEach {
@@ -233,7 +244,7 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
             }
             // カラムごとのy軸の開始位置を調節
             cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + ((itemLayoutType.isAddMoreYOffsets) ?  cellFrame.size.height * 2 :  cellFrame.size.height)
-            currentColumnNumber = currentColumnNumber < (numberOfColumns - 1) ? currentColumnNumber + 1 : 0
+            currentColumnNumber = currentColumnNumber < (numberOfColumns() - 1) ? currentColumnNumber + 1 : 0
 
             addAttributes(cellFrame: cellFrame, indexPath: indexPath)
         }
@@ -244,11 +255,11 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         let heights: [CGFloat] = [200, 180, 160, 140, 120]
         var currentHeights = heights
         guard cachedAttributes.isEmpty, let collectionView = collectionView else { return }
-        let cellWidth = contentWidth / CGFloat(numberOfColumns)
-        let cellXOffsets = (0 ..< numberOfColumns).map {
+        let cellWidth = contentWidth / CGFloat(numberOfColumns())
+        let cellXOffsets = (0 ..< numberOfColumns()).map {
             CGFloat($0) * cellWidth
         }
-        var cellYOffsets = [CGFloat](repeating: 0, count: numberOfColumns)
+        var cellYOffsets = [CGFloat](repeating: 0, count: numberOfColumns())
         var currentColumnNumber = 0
         (0 ..< collectionView.numberOfItems(inSection: 0)).forEach {
             let indexPath = IndexPath(item: $0, section: 0)
@@ -258,7 +269,7 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
             let heightsNumber = Int.random(in: 0 ..< currentHeights.count)
             var cellHeight = currentHeights[heightsNumber]
             let currentColumnYOffsets = cellYOffsets[currentColumnNumber]
-            let nextColumnYOffsets = cellYOffsets[currentColumnNumber < (numberOfColumns - 1) ? currentColumnNumber + 1 : 0]
+            let nextColumnYOffsets = cellYOffsets[currentColumnNumber < (numberOfColumns() - 1) ? currentColumnNumber + 1 : 0]
             let offsets = [currentColumnYOffsets, nextColumnYOffsets]
             let maxLength = heights.max() ?? 0
             let minLength = heights.min() ?? 0
@@ -273,7 +284,7 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
             currentHeights.remove(at: heightsNumber)
             let cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellWidth, height: cellHeight)
             cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellHeight
-            currentColumnNumber = currentColumnNumber < (numberOfColumns - 1) ? currentColumnNumber + 1 : 0
+            currentColumnNumber = currentColumnNumber < (numberOfColumns() - 1) ? currentColumnNumber + 1 : 0
 
             addAttributes(cellFrame: cellFrame, indexPath: indexPath)
         }
@@ -281,18 +292,18 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
 
     private func tiktokAttributes() {
         guard cachedAttributes.isEmpty, let collectionView = collectionView else { return }
-        let cellWidth = contentWidth / CGFloat(numberOfColumns)
+        let cellWidth = contentWidth / CGFloat(numberOfColumns())
         let cellHeight = delegate?.collectionView(collectionView, heightForPhotoAtIndexPath: IndexPath(item: 0, section: 0)) ?? 0
-        let cellXOffsets = (0 ..< numberOfColumns).map {
+        let cellXOffsets = (0 ..< numberOfColumns()).map {
             CGFloat($0) * cellWidth
         }
-        var cellYOffsets = [CGFloat](repeating: 0, count: numberOfColumns)
+        var cellYOffsets = [CGFloat](repeating: 0, count: numberOfColumns())
         var currentColumnNumber = 0
         (0 ..< collectionView.numberOfItems(inSection: 0)).forEach {
             let indexPath = IndexPath(item: $0, section: 0)
             let cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellWidth, height: cellHeight)
             cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellHeight
-            currentColumnNumber = currentColumnNumber < (numberOfColumns - 1) ? currentColumnNumber + 1 : 0
+            currentColumnNumber = currentColumnNumber < (numberOfColumns() - 1) ? currentColumnNumber + 1 : 0
 
             addAttributes(cellFrame: cellFrame, indexPath: indexPath)
         }
