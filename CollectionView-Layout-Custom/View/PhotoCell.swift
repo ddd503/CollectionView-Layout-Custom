@@ -38,6 +38,8 @@ final class PhotoCell: UICollectionViewCell {
         switch layoutType {
         case .pintarest:
             setLayer(cornerRadius: 5)
+        case .tiktok:
+            setLayer(cornerRadius: 5)
         default: break
         }
         PHImageManager.default().requestImage(for: asset,

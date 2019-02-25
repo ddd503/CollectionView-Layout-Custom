@@ -12,7 +12,7 @@ enum LayoutType {
     case grid
     case insta
     case pintarest
-    case tiktok
+    case tiktok // これやる
 }
 
 enum InstaLayoutItemType {
@@ -74,6 +74,8 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         switch self.currentLayoutType {
         case .pintarest:
             return 2
+        case .tiktok:
+            return 1
         default:
             return 3
         }
@@ -83,6 +85,8 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         switch self.currentLayoutType {
         case .pintarest:
             return 7
+        case .tiktok:
+            return 0
         default:
             return 1
         }
@@ -101,10 +105,11 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
     // MARK: - Life Cycle
 
     override func prepare() {
-        guard let type = delegate?.layoutType() else { return }
-        currentLayoutType = type
-        setupCollectionViewInset(type: type)
-        setupAttributes(type: type)
+        guard let layoutType = delegate?.layoutType() else { return }
+        currentLayoutType = layoutType
+        setupCollectionViewInset(layoutType: layoutType)
+        setupCollectionViewScrollType(layoutType: layoutType)
+        setupAttributes(layoutType: layoutType)
     }
 
     override var collectionViewContentSize: CGSize {
@@ -129,10 +134,10 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
 
     // MARK: - Setup Value
 
-    private func setupCollectionViewInset(type: LayoutType) {
+    private func setupCollectionViewInset(layoutType: LayoutType) {
         guard let collectionView = collectionView else { return }
         var inset = UIEdgeInsets.zero
-        switch type {
+        switch layoutType {
         case .pintarest:
             inset = UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7)
         default: break
@@ -140,16 +145,26 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         collectionView.contentInset = inset
     }
 
-    private func setupAttributes(type: LayoutType) {
-        switch type {
+    private func setupAttributes(layoutType: LayoutType) {
+        switch layoutType {
         case .grid:
             gridAttributes()
         case .insta:
             instaAttributes()
         case .pintarest:
             pintarestAttributes()
+        case .tiktok:
+            tiktokAttributes()
+        }
+    }
+
+    private func setupCollectionViewScrollType(layoutType: LayoutType) {
+        guard let collectionView = collectionView else { return }
+        switch layoutType {
+        case .tiktok:
+            collectionView.isPagingEnabled = true
         default:
-            break
+            collectionView.isPagingEnabled = false
         }
     }
 
@@ -256,6 +271,25 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
                 cellHeight = currentColumnYOffsets > nextColumnYOffsets ? minLength : maxLength
             }
             currentHeights.remove(at: heightsNumber)
+            let cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellWidth, height: cellHeight)
+            cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellHeight
+            currentColumnNumber = currentColumnNumber < (numberOfColumns - 1) ? currentColumnNumber + 1 : 0
+
+            addAttributes(cellFrame: cellFrame, indexPath: indexPath)
+        }
+    }
+
+    private func tiktokAttributes() {
+        guard cachedAttributes.isEmpty, let collectionView = collectionView else { return }
+        let cellWidth = contentWidth / CGFloat(numberOfColumns)
+        let cellHeight = delegate?.collectionView(collectionView, heightForPhotoAtIndexPath: IndexPath(item: 0, section: 0)) ?? 0
+        let cellXOffsets = (0 ..< numberOfColumns).map {
+            CGFloat($0) * cellWidth
+        }
+        var cellYOffsets = [CGFloat](repeating: 0, count: numberOfColumns)
+        var currentColumnNumber = 0
+        (0 ..< collectionView.numberOfItems(inSection: 0)).forEach {
+            let indexPath = IndexPath(item: $0, section: 0)
             let cellFrame = CGRect(x: cellXOffsets[currentColumnNumber], y: cellYOffsets[currentColumnNumber], width: cellWidth, height: cellHeight)
             cellYOffsets[currentColumnNumber] = cellYOffsets[currentColumnNumber] + cellHeight
             currentColumnNumber = currentColumnNumber < (numberOfColumns - 1) ? currentColumnNumber + 1 : 0

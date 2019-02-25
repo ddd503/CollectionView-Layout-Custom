@@ -21,11 +21,9 @@ final class ViewController: UIViewController {
         }
     }
 
-    var collectionViewCurrentLayout: LayoutType = .pintarest
+    var collectionViewCurrentLayout: LayoutType = .tiktok
 
     var assets: PHFetchResult<PHAsset> = PHFetchResult()
-
-    var heights: [CGFloat] = [100, 150, 200]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,7 +71,7 @@ extension ViewController: LayoutDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
-        return heights[Int.random(in: 0..<heights.count)]
+        return collectionView.frame.size.height
     }
 
 }
