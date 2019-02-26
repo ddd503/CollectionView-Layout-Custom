@@ -57,7 +57,7 @@ enum InstaLayoutItemType {
 // VC側にも準拠
 protocol LayoutDelegate: class {
     func layoutType() -> LayoutType
-    func collectionView(_ collectionView:UICollectionView, heightForPhotoAtIndexPath indexPath:IndexPath) -> CGFloat
+    func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat
 }
 
 final class CollectionViewCustomLayout: UICollectionViewLayout {
@@ -125,15 +125,20 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
     }
 
     private func setupAttributes(layoutType: LayoutType) {
+        guard cachedAttributes.isEmpty, let collectionView = collectionView else { return }
+        let cellLength = contentWidth / CGFloat(numberOfColumns())
+        let cellXOffsets = (0 ..< numberOfColumns()).map {
+            CGFloat($0) * cellLength
+        }
         switch layoutType {
         case .grid:
-            gridAttributes()
+            gridAttributes(collectionView: collectionView, cellLength: cellLength, cellXOffsets: cellXOffsets)
         case .insta:
-            instaAttributes()
+            instaAttributes(collectionView: collectionView, baseLength: cellLength, cellXOffsets: cellXOffsets)
         case .pintarest:
-            pintarestAttributes()
+            pintarestAttributes(collectionView: collectionView, cellWidth: cellLength, cellXOffsets: cellXOffsets)
         case .tiktok:
-            tiktokAttributes()
+            tiktokAttributes(collectionView: collectionView, cellWidth: cellLength, cellXOffsets: cellXOffsets)
         }
     }
 
@@ -193,12 +198,7 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         contentHeight = max(contentHeight, cellFrame.maxY)
     }
 
-    private func gridAttributes() {
-        guard cachedAttributes.isEmpty, let collectionView = collectionView else { return }
-        let cellLength = contentWidth / CGFloat(numberOfColumns())
-        let cellXOffsets = (0 ..< numberOfColumns()).map {
-            CGFloat($0) * cellLength
-        }
+    private func gridAttributes(collectionView: UICollectionView, cellLength: CGFloat, cellXOffsets: [CGFloat]) {
         var cellYOffsets = [CGFloat](repeating: 0, count: numberOfColumns())
         var currentColumnNumber = 0
         (0 ..< collectionView.numberOfItems(inSection: 0)).forEach {
@@ -211,14 +211,9 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         }
     }
 
-    private func instaAttributes() {
-        guard cachedAttributes.isEmpty, let collectionView = collectionView else { return }
+    private func instaAttributes(collectionView: UICollectionView, baseLength: CGFloat, cellXOffsets: [CGFloat]) {
         // 1ブロック区切りに入るセルの数
         let layoutBaseNumber = 17
-        let baseLength = contentWidth / CGFloat(numberOfColumns())
-        let cellXOffsets = (0 ..< numberOfColumns()).map {
-            CGFloat($0) * baseLength
-        }
         var cellYOffsets = [CGFloat](repeating: 0, count: numberOfColumns())
         var currentColumnNumber = 0
 
@@ -250,15 +245,10 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         }
     }
 
-    private func pintarestAttributes() {
+    private func pintarestAttributes(collectionView: UICollectionView, cellWidth: CGFloat, cellXOffsets: [CGFloat]) {
         // 本来は画像が持つ高さを使うが、今回は擬似的に用意
         let heights: [CGFloat] = [200, 180, 160, 140, 120]
         var currentHeights = heights
-        guard cachedAttributes.isEmpty, let collectionView = collectionView else { return }
-        let cellWidth = contentWidth / CGFloat(numberOfColumns())
-        let cellXOffsets = (0 ..< numberOfColumns()).map {
-            CGFloat($0) * cellWidth
-        }
         var cellYOffsets = [CGFloat](repeating: 0, count: numberOfColumns())
         var currentColumnNumber = 0
         (0 ..< collectionView.numberOfItems(inSection: 0)).forEach {
@@ -290,13 +280,8 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         }
     }
 
-    private func tiktokAttributes() {
-        guard cachedAttributes.isEmpty, let collectionView = collectionView else { return }
-        let cellWidth = contentWidth / CGFloat(numberOfColumns())
+    private func tiktokAttributes(collectionView: UICollectionView, cellWidth: CGFloat, cellXOffsets: [CGFloat]) {
         let cellHeight = delegate?.collectionView(collectionView, heightForPhotoAtIndexPath: IndexPath(item: 0, section: 0)) ?? 0
-        let cellXOffsets = (0 ..< numberOfColumns()).map {
-            CGFloat($0) * cellWidth
-        }
         var cellYOffsets = [CGFloat](repeating: 0, count: numberOfColumns())
         var currentColumnNumber = 0
         (0 ..< collectionView.numberOfItems(inSection: 0)).forEach {
