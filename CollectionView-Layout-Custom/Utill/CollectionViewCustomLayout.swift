@@ -102,6 +102,9 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         // collectionViewが配置処理を行う場所にあるlayoutAttributesを返す（持っているframeの一致を利用して、万が一一致しない場合は配置自体しない）
         // このやり方は一回ごとに全検索をかけるため効率が悪い最初のヒットで拾うようにする
         // 辞書のkeyで一致もあり？
+
+        // 初めてヒットしたいindexをとり、配列に格納、消す
+        // 後半にかけて処理時間が短くなるようにする
         return cachedAttributes.filter({ (layoutAttributes) -> Bool in
             rect.intersects(layoutAttributes.frame)
         })
