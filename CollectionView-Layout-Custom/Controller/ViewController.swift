@@ -82,6 +82,7 @@ extension ViewController: LayoutDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
+        // VC側から高さを渡す場合はここで渡す（indexPathごとに渡すため都度異なる高さを渡せる）
         return collectionView.frame.size.height
     }
 

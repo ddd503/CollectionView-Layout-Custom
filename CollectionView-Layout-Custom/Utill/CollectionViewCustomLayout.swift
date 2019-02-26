@@ -216,7 +216,6 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         let layoutBaseNumber = 17
         var cellYOffsets = [CGFloat](repeating: 0, count: numberOfColumns())
         var currentColumnNumber = 0
-
         (0 ..< collectionView.numberOfItems(inSection: 0)).forEach {
             let indexPath = IndexPath(item: $0, section: 0)
             var cellFrame: CGRect = .zero
