@@ -54,7 +54,7 @@ enum InstaLayoutItemType {
 
 }
 
-// VC側にも準拠
+// VC側にも準拠（LayoutTypeと高さの共通化に使用）
 protocol LayoutDelegate: class {
     func layoutType() -> LayoutType
     func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat
@@ -67,8 +67,8 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
     // MARK: - Private Propaty
 
     private var contentBounds = CGRect.zero
-    // オブジェクト属性をキャッシュする
     private var cachedAttributes = [UICollectionViewLayoutAttributes]()
+
     // レイアウトの総Height
     private var contentHeight: CGFloat = 0
     // レイアウトの総Width
@@ -96,15 +96,8 @@ final class CollectionViewCustomLayout: UICollectionViewLayout {
         return CGSize(width: contentWidth, height: contentHeight)
     }
 
-    // レイアウト内のオブジェクトの配列を返す（cellやheader等）
-    // 画面内のレイアウト属性を決定する
+    // 生成したUICollectionViewLayoutAttributesを返す（要素数→セルの数）
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        // collectionViewが配置処理を行う場所にあるlayoutAttributesを返す（持っているframeの一致を利用して、万が一一致しない場合は配置自体しない）
-        // このやり方は一回ごとに全検索をかけるため効率が悪い最初のヒットで拾うようにする
-        // 辞書のkeyで一致もあり？
-
-        // 初めてヒットしたいindexをとり、配列に格納、消す
-        // 後半にかけて処理時間が短くなるようにする
         return cachedAttributes.filter({ (layoutAttributes) -> Bool in
             rect.intersects(layoutAttributes.frame)
         })
